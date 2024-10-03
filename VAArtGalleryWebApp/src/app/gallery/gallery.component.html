@@ -2,6 +2,9 @@
   <h1>
     Galerias de Arte Família Abreu
   </h1>
+  
+  <button mat-raised-button color="primary" (click)="openAddGalleryDialog()">Adicionar Nova Galeria</button>
+
   <table mat-table [dataSource]="galleries">
 
     <ng-container matColumnDef="name">
@@ -36,6 +39,10 @@
 
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr 
+      mat-row 
+      *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{'even-row': (galleries.indexOf(row) % 2 === 0), 'odd-row': (galleries.indexOf(row) % 2 !== 0)}">
+    </tr>
   </table>
 </div>

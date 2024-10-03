@@ -1,0 +1,14 @@
+th{
+    background-color: blue !important;
+    color: white;
+  }
+
+.odd-row {
+    background-color: #dedbdb !important; 
+  }
+  
+.even-row {
+background-color: #757575 !important; 
+}
+  
+  
