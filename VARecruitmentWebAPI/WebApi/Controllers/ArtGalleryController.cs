@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VAArtGalleryWebAPI.Application.Queries;
+using VAArtGalleryWebAPI.Domain.Entities;
 using VAArtGalleryWebAPI.WebApi.Models;
+using VARecruitmentWebAPI.Application.Command;
 
 namespace VAArtGalleryWebAPI.WebApi.Controllers
 {
@@ -22,7 +24,15 @@ namespace VAArtGalleryWebAPI.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<CreateArtGalleryResult>> Create([FromBody] CreateArtGalleryRequest request)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Alguém vai ter de o implementar :)");
+            var gallery = await mediator.Send(new CreateGalleryCommand(request.Name, request.City, request.Manager));
+
+            if (gallery is ArtGallery)
+            {
+                var result = new CreateArtGalleryResult(gallery.Id, gallery.Name, gallery.City, gallery.Manager);
+                return Ok(result);
+            }
+
+            return BadRequest();
         }
     }
 }

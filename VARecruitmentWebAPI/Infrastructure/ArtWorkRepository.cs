@@ -34,8 +34,22 @@ namespace VAArtGalleryWebAPI.Infrastructure
         }
 
         public async Task<bool> DeleteAsync(Guid artWorkId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
+        {            
+            cancellationToken.ThrowIfCancellationRequested();
+                        
+            var galleries = await new ArtGalleryRepository(_filePath).GetAllArtGalleriesAsync(cancellationToken);
+                        
+            var gallery = galleries.FirstOrDefault(t => t.ArtWorksOnDisplay?.Any(g => g.Id == artWorkId) == true);
+            
+            if (gallery != null)
+            {                
+                gallery.ArtWorksOnDisplay.RemoveAll(t => t.Id == artWorkId);
+                
+                await UpdateGalleries(galleries);
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<List<ArtWork>> GetArtWorksByGalleryIdAsync(Guid artGalleryId, CancellationToken cancellationToken = default)
